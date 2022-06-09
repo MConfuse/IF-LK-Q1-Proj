@@ -2,6 +2,8 @@ package de.projekt.backend;
 
 // TODO: Interface Schnittstellen für GUI und BackendService
 
+import de.projekt.backend.product.Produkt;
+
 /**
  * Simuliert eine Schnittstelle mit einer API eines separaten Serversystems.
  */
@@ -28,8 +30,17 @@ public interface IGuiInteractions
 	/**
 	 * Gibt alle Produktkategorien wieder.
 	 *
-	 * @return Ein String Array
+	 * @return Ein String Array mit allen aktuellen Kategorien
 	 */
-	String[] gibAlleProduktKategorien();
+	String[] gibAlleArtikelKategorien();
+
+	/**
+	 * Gibt eine Liste der vorhandenen Produkte der gegebenen Kategorie wieder.
+	 *
+	 * @param artikelKategorie Die Artikel Kategorie, eine der von {@link #gibAlleArtikelKategorien()} gegebenen
+	 *                         Strings
+	 * @return Die Produkte der Kategorie, oder null, wenn es diese nicht gibt/ein fehler aufkommt
+	 */
+	Produkt[] gibAlleProdukteDerKategorie(String artikelKategorie);
 
 }

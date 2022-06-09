@@ -1,13 +1,14 @@
 package de.projekt.gui;
 
-import de.nrw.sql.DatabaseConnector;
 import de.projekt.Main;
-import de.projekt.backend.BackendService;
 import de.projekt.backend.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+
+import static de.projekt.Main.backendService;
+import static de.projekt.Main.guiMain;
 
 public class GuiLoginCreateAccount
 {
@@ -40,7 +41,7 @@ public class GuiLoginCreateAccount
 		buttonLogin.addActionListener(e ->
 		{
 			labelLoginStatus.setText("Logge ein...");
-			User user = Main.backendService.accountLogin(textLoginName.getText(),
+			User user = backendService.accountLogin(textLoginName.getText(),
 					new String(passwordLoginPassword.getPassword()));
 
 			if (user == null)
@@ -61,7 +62,10 @@ public class GuiLoginCreateAccount
 
 			// Schließt login Fenster, öffnet Hauptfenster
 			frame.setVisible(false);
-			Main.guiMain = new GuiMain(Main.backendService);
+			guiMain = new GuiMain(backendService);
+			// Erstellt den Gui-Thread
+			Thread guiThread = new Thread(guiMain, "Gui-Thread");
+			guiThread.start();
 			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 		});
 
@@ -70,7 +74,7 @@ public class GuiLoginCreateAccount
 		{
 			labelCreateStatus.setText("Creating Account...");
 
-			if (Main.backendService.accountErstellen(textCreateName.getText(), textCreatePassword.getText()))
+			if (backendService.accountErstellen(textCreateName.getText(), textCreatePassword.getText()))
 				labelCreateStatus.setText("Account Erstellt!");
 			else
 				labelCreateStatus.setText("Account existiert!");

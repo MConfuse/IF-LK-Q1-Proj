@@ -3,9 +3,11 @@ package de.projekt.gui;
 import de.projekt.Main;
 import de.projekt.backend.BackendService;
 import de.projekt.backend.IGuiInteractions;
+import de.projekt.backend.product.Produkt;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 // TODO: Das Ganze GUI mithilfe von Java AWT
 public class GuiMain implements Runnable
@@ -13,6 +15,11 @@ public class GuiMain implements Runnable
 	public static GuiMain instance;
 
 	private final IGuiInteractions guiInteractions;
+	private final String[] artikelarten;
+	/**
+	 * Speichert alle Produkte der aktuellen Artikelart.
+	 */
+	private Produkt[] produktCache;
 
 	private final JFrame frame = new JFrame(Main.NAME);
 	private boolean running = true;
@@ -20,6 +27,7 @@ public class GuiMain implements Runnable
 	public GuiMain(BackendService backendService)
 	{
 		guiInteractions = backendService;
+		artikelarten = guiInteractions.gibAlleArtikelKategorien();
 
 
 		// --- Setting up the Frame ---

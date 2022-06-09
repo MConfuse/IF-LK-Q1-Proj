@@ -31,17 +31,11 @@ public class Main
 		connector = new DatabaseConnector(null, -1, FileManager.DATENBANK.getAbsolutePath(), null,
 				null);
 		backendService = new BackendService();
-
-		// Erstellt den Gui-Thread
-//		Thread guiThread = new Thread(guiMain, "Gui-Thread");
-//		guiThread.start();
-
 		new GuiLoginCreateAccount();
-
 
 		new Thread(() ->
 		{
-			String line = "";
+			String line;
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
 			try

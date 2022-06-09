@@ -3,12 +3,12 @@ package de.projekt.backend;
 import de.nrw.sql.DatabaseConnector;
 import de.nrw.sql.QueryResult;
 import de.projekt.Main;
+import de.projekt.backend.product.Produkt;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-// TODO: Alles mögliche was noch für das Backend wichtig wird
 public class BackendService implements IGuiInteractions
 {
 	private static final DatabaseConnector connector = Main.connector;
@@ -62,7 +62,7 @@ public class BackendService implements IGuiInteractions
 	}
 
 	@Override
-	public String[] gibAlleProduktKategorien()
+	public String[] gibAlleArtikelKategorien()
 	{
 		connector.executeStatement("SELECT Artikelart FROM Produkte GROUP BY Artikelart");
 		QueryResult result = connector.getCurrentQueryResult();
@@ -71,7 +71,24 @@ public class BackendService implements IGuiInteractions
 		for (int y = 0; y < result.getRowCount(); y++)
 			stringList.add(result.getData()[y][0]);
 
-		return new String[0];
+		return stringList.toArray(new String[0]);
+	}
+
+	@Override
+	public Produkt[] gibAlleProdukteDerKategorie(String artikelKategorie)
+	{
+		connector.executeStatement("SELECT * FROM Produkte WHERE Artikelart = \"" + artikelKategorie + "\"");
+
+		Produkt[] produkts = new Produkt[connector.getCurrentQueryResult().getRowCount()];
+
+		for (int y = 0; y < produkts.length; y++)
+		{
+			String[][] data = connector.getCurrentQueryResult().getData();
+			produkts[y] = new Produkt(Integer.parseInt(data[y][0]), data[y][1], data[y][2],
+					Float.parseFloat(data[y][3].replace(',', '.')), "~None~", true);
+		}
+
+		return produkts;
 	}
 
 }

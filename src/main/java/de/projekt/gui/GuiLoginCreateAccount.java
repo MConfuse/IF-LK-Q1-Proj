@@ -1,5 +1,9 @@
 package de.projekt.gui;
 
+import de.nrw.sql.DatabaseConnector;
+import de.projekt.Main;
+import de.projekt.backend.BackendService;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -30,10 +34,17 @@ public class GuiLoginCreateAccount
 
 	public GuiLoginCreateAccount()
 	{
+		DatabaseConnector connector = Main.connector;
+
 		buttonLogin.setToolTipText("Versucht mit den gegebenen Daten in den Account einzuloggen.");
 		buttonLogin.addActionListener(e ->
 		{
 			labelLoginStatus.setText("Test");
+			String passwort = new String(passwordLoginPassword.getPassword());
+			connector.executeStatement("SELECT Name, Passwort FROM Personen WHERE Name = \"" + textLoginName.getText() + "\" AND Passwort = \"" + passwort + "\"");
+			BackendService.printQueryResult(connector.getCurrentQueryResult());
+
+
 		});
 
 		buttonLogin.setToolTipText("Versucht mit den gegebenen Daten in den Account einzuloggen.");

@@ -129,6 +129,7 @@ public class DatabaseConnector
 		{
 			//Fehlermeldung speichern
 			message = e.getMessage();
+			e.printStackTrace();
 		}
 	}
 

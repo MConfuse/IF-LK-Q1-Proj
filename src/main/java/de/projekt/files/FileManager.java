@@ -21,7 +21,7 @@ public class FileManager
 		if (dateiOrdner.mkdir())
 			System.out.println("FileManager.initialize: Ordner erstellt!");
 
-		DATENBANK = new File(dateiOrdner, "datenbank.db");
+		DATENBANK = new File(dateiOrdner, "Einkaufswebsite.db");
 		DATENBANK.createNewFile();
 	}
 

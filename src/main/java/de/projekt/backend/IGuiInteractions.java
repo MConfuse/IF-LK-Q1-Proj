@@ -1,10 +1,35 @@
 package de.projekt.backend;
 
 // TODO: Interface Schnittstellen für GUI und BackendService
+
+/**
+ * Simuliert eine Schnittstelle mit einer API eines separaten Serversystems.
+ */
 public interface IGuiInteractions
 {
-	User accountLogin(String user, String passwort);
+	/**
+	 * Versucht den Nutzer in den Account mit gegebenen Anmeldedaten einzuloggen.
+	 *
+	 * @param name     Der Name des Accounts
+	 * @param passwort Das Passwort des Accounts
+	 * @return Ein User-Objekt, wenn erfolgreich, oder null, wenn ein Fehler aufgetreten ist
+	 */
+	User accountLogin(String name, String passwort);
 
-	User accountErstellen(String user, String passwort);
+	/**
+	 * Erstellt einen neuen Account.
+	 *
+	 * @param name     Der Name des Accounts
+	 * @param passwort Das Passwort des Accounts
+	 * @return true, wenn der Account erfolgreich erstellt wurde, false, wenn nicht
+	 */
+	boolean accountErstellen(String name, String passwort);
+
+	/**
+	 * Gibt alle Produktkategorien wieder.
+	 *
+	 * @return Ein String Array
+	 */
+	String[] gibAlleProduktKategorien();
 
 }

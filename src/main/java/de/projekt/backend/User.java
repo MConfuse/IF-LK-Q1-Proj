@@ -8,19 +8,11 @@ import java.util.UUID;
 /**
  * Ein Nutzer, wird erstellt, sobald ein erfolgreicher Login von der Datenbank gemeldet wurde.
  */
-public class User
+public record User(UUID uuid, String name)
 {
-	private UUID uuid;
-	private String name;
-
-	public User(UUID uuid, String name)
-	{
-		this.uuid = uuid;
-		this.name = name;
-	}
 
 	/**
-	 * Generates a new Type 1 UUID.<br>
+	 * Generates a new Type 1 UUID.
 	 *
 	 * @return A new {@link UUID}.
 	 */

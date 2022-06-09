@@ -17,8 +17,9 @@ public class Main
 	public static final File ORDNER = new File("util/"); // Erstellt am Ausführungsort den util-Ordner
 	public static final String NAME = "Einkaufswebseite v0.1";
 
-//	public static GuiMain guiMain = new GuiMain(new BackendService());
 	public static DatabaseConnector connector;
+	public static BackendService backendService;
+	public static GuiMain guiMain;
 
 	public static User user;
 
@@ -29,6 +30,7 @@ public class Main
 
 		connector = new DatabaseConnector(null, -1, FileManager.DATENBANK.getAbsolutePath(), null,
 				null);
+		backendService = new BackendService();
 
 		// Erstellt den Gui-Thread
 //		Thread guiThread = new Thread(guiMain, "Gui-Thread");

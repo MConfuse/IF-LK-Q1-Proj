@@ -3,9 +3,11 @@ package de.projekt.gui;
 import de.nrw.sql.DatabaseConnector;
 import de.projekt.Main;
 import de.projekt.backend.BackendService;
+import de.projekt.backend.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 
 public class GuiLoginCreateAccount
 {
@@ -34,23 +36,44 @@ public class GuiLoginCreateAccount
 
 	public GuiLoginCreateAccount()
 	{
-		DatabaseConnector connector = Main.connector;
-
 		buttonLogin.setToolTipText("Versucht mit den gegebenen Daten in den Account einzuloggen.");
 		buttonLogin.addActionListener(e ->
 		{
-			labelLoginStatus.setText("Test");
-			String passwort = new String(passwordLoginPassword.getPassword());
-			connector.executeStatement("SELECT Name, Passwort FROM Personen WHERE Name = \"" + textLoginName.getText() + "\" AND Passwort = \"" + passwort + "\"");
-			BackendService.printQueryResult(connector.getCurrentQueryResult());
+			labelLoginStatus.setText("Logge ein...");
+			User user = Main.backendService.accountLogin(textLoginName.getText(),
+					new String(passwordLoginPassword.getPassword()));
 
+			if (user == null)
+			{
+				labelLoginStatus.setText("Login Fehlgeschlagen!");
+				return;
+			}
 
+			labelLoginStatus.setText("Login Erfolgreich!");
+			try
+			{
+				Thread.sleep(500); // Delay zwischen Nachricht und ändern des GUI, für verbesserte Nutzererfahrung
+			}
+			catch (InterruptedException ex)
+			{
+				ex.printStackTrace();
+			}
+
+			// Schließt login Fenster, öffnet Hauptfenster
+			frame.setVisible(false);
+			Main.guiMain = new GuiMain(Main.backendService);
+			frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
 		});
 
-		buttonLogin.setToolTipText("Versucht mit den gegebenen Daten in den Account einzuloggen.");
-		buttonLogin.addActionListener(e ->
+		buttonCreate.setToolTipText("Versucht mit den gegebenen Daten in den Account einzuloggen.");
+		buttonCreate.addActionListener(e ->
 		{
+			labelCreateStatus.setText("Creating Account...");
 
+			if (Main.backendService.accountErstellen(textCreateName.getText(), textCreatePassword.getText()))
+				labelCreateStatus.setText("Account Erstellt!");
+			else
+				labelCreateStatus.setText("Account existiert!");
 		});
 
 		panel.setLayout(null);
@@ -61,7 +84,7 @@ public class GuiLoginCreateAccount
 		labelLoginPassword.setBounds(10, 70, 60, 25);
 		passwordLoginPassword.setBounds(80, 70, 125, 25);
 		buttonLogin.setBounds(220, 50, 125, 30);
-		labelLoginStatus.setBounds(220, 80, 125, 25);
+		labelLoginStatus.setBounds(220, 80, 135, 25);
 
 		panel.add(labelLogin);
 		panel.add(labelLoginName);
@@ -88,7 +111,7 @@ public class GuiLoginCreateAccount
 		panel.add(labelCreateStatus);
 
 		frame.add(panel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setMinimumSize(new Dimension(375, 250));
 		frame.pack();
 		frame.setVisible(true);

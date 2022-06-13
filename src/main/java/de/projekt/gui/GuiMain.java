@@ -22,6 +22,12 @@ public class GuiMain implements Runnable
 	private Produkt[] produktCache;
 
 	private final JFrame frame = new JFrame(Main.NAME);
+
+	private final JSplitPane splitPaneArtikelartProdukte = new JSplitPane();
+	private final JList<String> listArtikelart = new JList<>();
+	private final JSplitPane splitPaneProdukteInfo = new JSplitPane();
+	private final JPanel paneProduktInfo = new JPanel();
+
 	private boolean running = true;
 
 	public GuiMain(BackendService backendService)
@@ -29,12 +35,22 @@ public class GuiMain implements Runnable
 		guiInteractions = backendService;
 		artikelarten = guiInteractions.gibAlleArtikelKategorien();
 
+		listArtikelart.setListData(artikelarten);
+		listArtikelart.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting())
+			{
+				System.out.println(listArtikelart.getSelectedValue());
+				produktCache = guiInteractions.gibAlleProdukteDerKategorie(listArtikelart.getSelectedValue());
+			}
+		});
+		splitPaneArtikelartProdukte.setLeftComponent(listArtikelart);
+		splitPaneArtikelartProdukte.setRightComponent(splitPaneProdukteInfo);
 
 		// --- Setting up the Frame ---
 		frame.setSize(350, 250);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		frame.add(splitPane);
-//		frame.setJMenuBar(menu);
+		frame.add(splitPaneArtikelartProdukte);
+		//		frame.setJMenuBar(menu);
 		frame.setMinimumSize(new Dimension(343, 230));
 		frame.pack();
 		frame.setVisible(true);
